@@ -84,8 +84,9 @@ public class SwiftPaymentPlugin: NSObject,FlutterPlugin ,SFSafariViewControllerD
             }
         }
         
+        // Fixed: Remove optional chaining since paymentParams is not optional
         if let transaction = transaction {
-            errorDetails = (errorDetails ?? "") + ", Transaction ID: \(transaction.paymentParams?.checkoutID ?? "Unknown")"
+            errorDetails = (errorDetails ?? "") + ", Transaction ID: \(transaction.paymentParams.checkoutID)"
         }
         
         result(createDetailedError(code: errorCode, message: errorMessage, details: errorDetails))
