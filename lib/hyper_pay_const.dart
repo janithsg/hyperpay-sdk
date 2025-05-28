@@ -26,16 +26,59 @@ class PaymentBrands {
   static const String visa = "VISA";
 }
 
-/// This class holds the data for a payment result,
-/// containing an errorString (nullable) and a paymentResult object.
+/// Enhanced PaymentResult enum with more specific error types
+enum PaymentResult {
+  success,
+  sync,
+  error,
+  canceled,
+  networkError,
+  timeout,
+  noResult,
+}
+
+/// Enhanced PaymentResultData class with additional error context
 class PaymentResultData {
   String? errorString;
   PaymentResult paymentResult;
+  String? errorCode;
+  String? errorDetails;
 
   PaymentResultData({
     required this.errorString,
     required this.paymentResult,
+    this.errorCode,
+    this.errorDetails,
   });
+
+  /// Convenience method to check if payment was successful
+  bool get isSuccess => paymentResult == PaymentResult.success || paymentResult == PaymentResult.sync;
+
+  /// Convenience method to check if payment failed
+  bool get isError => !isSuccess;
+
+  /// Get a complete error description for logging
+  String get fullErrorDescription {
+    if (isSuccess) return 'Payment completed successfully';
+
+    String description = 'Payment failed: ${paymentResult.toString()}';
+    if (errorString != null) description += '\nUser Message: $errorString';
+    if (errorCode != null) description += '\nError Code: $errorCode';
+    if (errorDetails != null) description += '\nError Details: $errorDetails';
+
+    return description;
+  }
+
+  /// Convert to JSON for logging purposes
+  Map<String, dynamic> toJson() {
+    return {
+      'paymentResult': paymentResult.toString(),
+      'errorString': errorString,
+      'errorCode': errorCode,
+      'errorDetails': errorDetails,
+      'isSuccess': isSuccess,
+    };
+  }
 }
 
 /// This class is used to store the language constants used for Payment.
