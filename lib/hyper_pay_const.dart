@@ -26,17 +26,6 @@ class PaymentBrands {
   static const String visa = "VISA";
 }
 
-/// Enhanced PaymentResult enum with more specific error types
-enum PaymentResult {
-  success,
-  sync,
-  error,
-  canceled,
-  networkError,
-  timeout,
-  noResult,
-}
-
 /// Enhanced PaymentResultData class with additional error context
 class PaymentResultData {
   String? errorString;
